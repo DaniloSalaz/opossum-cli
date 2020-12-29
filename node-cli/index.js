@@ -5,52 +5,65 @@ const axios = require('axios').default;
 const BASE_URL = 'https://api.abuseipdb.com/api/v2/';
 
 const argv = yargs
-    .command('check', 'Retorna los detalles de una IP address', {
-        ipAddress: {
-            description: 'IP a verificar. (Required)',
-            alias: 'ip',
-            type: 'string',
-        },
-        maxDays: {
-            description: 'Determina el tiempo (en días) máximo del reporte. Valor por defecto 30 días, mínimo (1) máximo (365)',
-            alias: 'd',
-            type: 'number',
-        },
-        verbose: {
-            description: 'Verbose, retorna la toda la infomación.',
-            alias: 'v',
-            type: 'boolean',
-        }
-    }).command('blacklist', 'Retorna la lista negra de todas las IPs reportadas', {
-        min: {
-            description: 'Confidence minimum. Valor por defecto 100, mínumo(25) máximo (100)',
-            alias: 'm',
-            type: 'number',
-        },
-        limit: {
-            description: 'Límite de IPs. Valor por defecto 10.000',
-            alias: 'l',
-            type: 'number',
-        },
-        plaintext: {
-            description: 'Response en texto plano',
-            alias: 'text',
-            type: 'boolean'
-
-        },
-        desc: {
-            description: 'Ordenar descendente',
-            type: 'boolean'
-        },
-        last: {
-            description: 'Ordenar descendente las IPs mas recientes',
-            type: 'boolean'
-        }
-    })
-    .option('key', {
-        alias: 'k',
-        description: 'ApiKey (Required)',
-        type: 'string',
+    .command('abuseip', "Requests to https://www.abuseipdb.com/ ", (yargs) => {
+        yargs
+        .usage('usage: $0 abuseip <item>')
+        .command('check', 'IP Address report', {
+            key: {
+                alias: 'k',
+                description: 'ApiKey (Required)',
+                type: 'string',
+            },
+            ipAddress: {
+                description: 'IP to verify. (Required)',
+                alias: 'ip',
+                type: 'string',
+            },
+            maxDays: {
+                description: 'Determines how far back in time(days). The default is 30, min (1) max (365)',
+                alias: 'd',
+                type: 'number',
+            },
+            verbose: {
+                description: 'Verbose',
+                alias: 'v',
+                type: 'boolean',
+            }
+        })
+        .command('blacklist', 'Blacklist of reported IPs', {
+            key: {
+                alias: 'k',
+                description: 'ApiKey (Required)',
+                type: 'string',
+            },
+            min: {
+                description: 'Confidence minimum. The default is 30, min (25) max (100)',
+                alias: 'm',
+                type: 'number',
+            },
+            limit: {
+                description: 'Limit return IPs. The default 10.000',
+                alias: 'l',
+                type: 'number',
+            },
+            plaintext: {
+                description: 'Response plain text',
+                alias: 'text',
+                type: 'boolean'
+    
+            },
+            desc: {
+                description: 'Descending order',
+                type: 'boolean'
+            },
+            last: {
+                description: 'Descending order of the last IPs',
+                type: 'boolean'
+            }
+        })
+        .updateStrings({
+            'Commands:': 'item:'
+        })
     })
     .help()
     .alias('help', 'h')
@@ -113,5 +126,4 @@ function main() {
     }
 
 }
-
 main();
